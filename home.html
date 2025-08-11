@@ -23,7 +23,6 @@
       border-radius: 12px;
       width: 50%;
       max-width: 350px;
-      margin-bottom:px;
     }
     textarea {
       width: 100%;
@@ -69,57 +68,60 @@
   </div>
 
   <script>
-    // Prevent access if not logged in
-    if (!localStorage.getItem('lawUser')) {
-      window.location.href = "login.html";
-    }
+    // Redirect to login if not logged in
+    if (!localStorage.getItem('lawUser')) {
+      window.location.href = "login.html";
+    }
 
-    const lawsDB = [
-    {
-      keywords: ["protest", "freedom of speech", "freedom of assembly", "right to protest", "demonstration", "rally"],
-      section: "Article 19 - Freedom of Speech and Assembly",
-      explanation: "You have the right to peacefully protest under Article 19.",
-      pros: "Protects your right to express opinions and assemble peacefully.",
-      cons: "Protests must be peaceful and follow local laws to avoid legal issues."
-    },
-    {
-      keywords: ["privacy", "personal data", "confidentiality", "private life", "data protection"],
-      section: "Article 21 - Right to Privacy",
-      explanation: "The right to privacy is protected under Article 21.",
-      pros: "Guards against unlawful intrusion.",
-      cons: "Subject to reasonable restrictions in the interest of security and public order."
-    },
-    {
-      keywords: ["self protection", "self defense", "protect myself", "defend myself", "right to defend", "right of private defence"],
-      section: "Section 96-106 IPC – Right of Private Defence",
-      explanation: "You have the right to protect yourself and others against certain crimes under Sections 96 to 106 of the Indian Penal Code.",
-      pros: "Allows immediate action to protect life and property without waiting for law enforcement.",
-      cons: "Excessive force beyond what is necessary may result in legal consequences."
-    }
-    ];
+    // Fixed data structure: Array of law objects
+    const lawsDB = [
+      {
+        keywords: ["protest", "freedom of speech", "freedom of assembly", "right to protest", "demonstration", "rally"],
+        section: "Article 19 - Freedom of Speech and Assembly",
+        explanation: "You have the right to peacefully protest under Article 19.",
+        pros: "Protects your right to express opinions and assemble peacefully.",
+        cons: "Protests must be peaceful and follow local laws to avoid legal issues."
+      },
+      {
+        keywords: ["privacy", "personal data", "confidentiality", "private life", "data protection"],
+        section: "Article 21 - Right to Privacy",
+        explanation: "The right to privacy is protected under Article 21.",
+        pros: "Guards against unlawful intrusion.",
+        cons: "Subject to reasonable restrictions in the interest of security and public order."
+      },
+      {
+        keywords: ["self protection", "self defense", "protect myself", "defend myself", "right to defend", "right of private defence"],
+        section: "Sections 96-106 IPC – Right of Private Defence",
+        explanation: "You have the right to protect yourself and others against certain crimes under Sections 96 to 106 of the Indian Penal Code.",
+        pros: "Allows immediate action to protect life and property without waiting for law enforcement.",
+        cons: "Excessive force beyond what is necessary may result in legal consequences."
+      }
+    ];
 
-    document.getElementById('submitBtn').addEventListener('click', () => {
-      const query = document.getElementById('chatbox').value.toLowerCase().trim();
-      let output = '';
-      let found = false;
+    document.getElementById('submitBtn').addEventListener('click', () => {
+      const query = document.getElementById('chatbox').value.toLowerCase().trim();
+      let foundLaw = null;
 
-      for (const law of lawsDB) {
-        if (law.keywords.some(keyword => query.includes(keyword))) {
-          output += `<h3>${law.section}</h3>`;
-          output += `<p><strong>Explanation:</strong> ${law.explanation}</p>`;
-          output += `<p><strong>Pros:</strong> ${law.pros}</p>`;
-          output += `<p><strong>Cons:</strong> ${law.cons}</p>`;
-          found = true;
-          break; // Stop after finding the first match
-        }
-      }
+      // Search for a matching law
+      for (const law of lawsDB) {
+        if (law.keywords.some(keyword => query.includes(keyword))) {
+          foundLaw = law;
+          break;
+        }
+      }
 
-      if (!found) {
-        output = "<p>Sorry, no related law section found for your query.</p>";
-      }
+      let output = "";
+      if (foundLaw) {
+        output += `<h3>${foundLaw.section}</h3>`;
+        output += `<p><strong>Explanation:</strong> ${foundLaw.explanation}</p>`;
+        output += `<p><strong>Pros:</strong> ${foundLaw.pros}</p>`;
+        output += `<p><strong>Cons:</strong> ${foundLaw.cons}</p>`;
+      } else {
+        output = "<p>Sorry, no related law section found for your query.</p>";
+      }
 
-      document.getElementById('result').innerHTML = output;
-    });
-  </script>
+      document.getElementById('result').innerHTML = output;
+    });
+  </script>
 </body>
 </html>
