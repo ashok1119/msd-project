@@ -55,18 +55,29 @@
   </div>
 
   <script>
-    function signup() {
-      const username = document.getElementById('signupUsername').value.trim();
-      const password = document.getElementById('signupPassword').value.trim();
+  function signup() {
+    const username = document.getElementById('signupUsername').value.trim();
+    const password = document.getElementById('signupPassword').value.trim();
 
-      if (username && password) {
-        localStorage.setItem('lawUser', JSON.stringify({ username, password }));
-        alert("Signup successful! You can now login.");
-        window.location.href = "login.html";
-      } else {
-        alert("Please fill all fields.");
-      }
+    if (!username || !password) {
+      alert("Please fill all fields.");
+      return;
     }
-  </script>
+
+    let users = JSON.parse(localStorage.getItem("lawUsers")) || [];
+
+    if (users.some(user => user.username === username)) {
+      alert("Username already exists. Try another one.");
+      return;
+    }
+
+    users.push({ username, password });
+    localStorage.setItem("lawUsers", JSON.stringify(users));
+
+    alert("Signup successful! Please login.");
+    window.location.href = "login.html"; // 👈 goes to login page
+  }
+</script>
+
 </body>
 </html>
